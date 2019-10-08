@@ -139,9 +139,8 @@ void back_track(int dlevel, map<int, pair<order, bool>> &assignment)
 		assignment.erase(x);
 }	
 
-bool Chaff(vector<clause> &clauses)
+bool Chaff(vector<clause> &clauses, map<int, pair<order, bool>> &assignment)
 {
-	map<int, pair<order,bool>>assignment;
 	map<int, int> antecedent;
 	int dlevel=0;
 	int conflict_clause;
@@ -154,7 +153,6 @@ bool Chaff(vector<clause> &clauses)
 
 		while (BCP(conflict_clause, dlevel, clauses, assignment, antecedent, latest))
 		{
-			cout<<"LOLOLO\n";
 			int blevel = analyze_conflict(conflict_clause, dlevel, clauses, assignment, antecedent, latest);
 			if(blevel<0)
 				return 1;
@@ -186,5 +184,18 @@ vector<clause> read_CNF()
 int32_t main()
 {
 	vector<clause>clauses = read_CNF();
-	cout<<Chaff(clauses);
+	map<int, pair<order, bool>> assignment;
+	bool issatisfiable = Chaff(clauses, assignment);
+	if(issatisfiable)
+	{
+		cout << "SATISFIABLE!\n";
+		for (auto p : assignment)
+		{
+			cout << p.first << " " << p.second.second << '\n';
+		}
+	}
+	else 
+	{
+		cout<<"UNSATISFIABLE!\n";
+	}
 }
