@@ -1,4 +1,8 @@
-#include<bits/stdc++.h>
+#include<iostream>
+#include<map>
+#include<vector>
+#include<cassert>
+
 using namespace std;
 #define int long long 
 typedef vector<int> clause;
