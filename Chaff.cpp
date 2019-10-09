@@ -93,7 +93,7 @@ int analyze_conflict()
         assert(cl.size());
         //stopping criterion
         int cnt=0;
-        cout<<curr_level<<"- ";
+        cout<<"conflict clause- ";
         for(auto &l: cl)
         {
             if(assign_level[abs(l)] == curr_level)
@@ -281,7 +281,9 @@ int32_t main(int32_t argc, char **argv)
     bool issatisfiable = Chaff();
     if (issatisfiable)
     {
-        cout << "SATISFIABLE!\n";
+        cout << "SATISFIABLE!\nValues:\n";
+        for(int var=1; var<value.size(); ++var)
+            cout<<var<<": "<<value[var]<<"\n";
     }
     else
     {
