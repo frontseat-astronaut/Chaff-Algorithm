@@ -54,7 +54,7 @@ bool BCP()
                 flag = 1;
                 assert(value[abs(lit)]==-1);
                 value[abs(lit)] = (lit > 0) ? 1 : 0;
-                cout << "propagate to " << abs(lit) << " = " << value[abs(lit)] <<" at level "<<curr_level<<"\n";
+                // cout << "propagate to " << abs(lit) << " = " << value[abs(lit)] <<" at level "<<curr_level<<"\n";
                 assign_level[abs(lit)] = curr_level;
                 antecedent[abs(lit)] = i;
                 assign_stack.push_back({lit, curr_level});
@@ -93,12 +93,12 @@ int analyze_conflict()
         assert(cl.size());
         //stopping criterion
         int cnt=0;
-        cout<<"conflict clause- ";
+        // cout<<"conflict clause- ";
         for(auto &l: cl)
         {
             if(assign_level[abs(l)] == curr_level)
                 cnt++;
-            cout<<l<<":"<<assign_level[abs(l)]<<" ";
+            // cout<<l<<":"<<assign_level[abs(l)]<<" ";
         }
         if(cnt == 1)
             break;
@@ -125,7 +125,7 @@ int analyze_conflict()
                 if(found)
                     break;
             }
-            cout<<"pop "<<var<<"\n";
+            // cout<<"pop "<<var<<"\n";
             value[var] = -1;
             assign_level[var] = -1;
             antecedent[var] = -1;
@@ -134,7 +134,7 @@ int analyze_conflict()
         assert(assign_stack.size());
         lit = assign_stack.back().first;
         assign_stack.pop_back();
-        cout<<"literal: "<<lit<<"\n";        
+        // cout<<"literal: "<<lit<<"\n";        
         int ante = antecedent[abs(lit)];
         assert(ante!=-1);
         cl = resolve(cl, clauses[ante], abs(lit));
@@ -151,7 +151,7 @@ int analyze_conflict()
             back_level = max(back_level, assign_level[abs(l)]);
         }
     }
-    cout<<"backtrack to "<<back_level<<"!\n";
+    // cout<<"backtrack to "<<back_level<<"!\n";
     return back_level;
 }
 
@@ -161,7 +161,7 @@ bool decide()
     {
         if(value[var]==-1)
         {
-            cout<<"decide "<<var<<" = 1 at level "<<curr_level<<"\n";
+            // cout<<"decide "<<var<<" = 1 at level "<<curr_level<<"\n";
             value[var] = 1;
             assign_level[var] = curr_level;
             antecedent[var] = -1;
@@ -174,10 +174,10 @@ bool decide()
 
 void backtrack()
 {
-    cout<<"stack before backtrack: ";
-    for(auto x: assign_stack)
-        cout<<x.second<<" ";
-    cout<<"\n";
+    // cout<<"stack before backtrack: ";
+    // for(auto x: assign_stack)
+    //     cout<<x.second<<" ";
+    // cout<<"\n";
     while(assign_stack.size() && assign_stack.back().second > curr_level)
     {
         int var = abs(assign_stack.back().first);
@@ -187,10 +187,10 @@ void backtrack()
         assign_stack.pop_back();
     }
     
-    cout<<"stack after backtrack: ";
-    for(auto x: assign_stack)
-        cout<<x.second<<" ";
-    cout<<"\n";
+    // cout<<"stack after backtrack: ";
+    // for(auto x: assign_stack)
+    //     cout<<x.second<<" ";
+    // cout<<"\n";
     
     // cout<<"variable dlevel: ";
     // for(int var=1; var<value.size(); ++var)
@@ -266,6 +266,8 @@ void read_CNF(string filename)
                 clauses[cl_idx].push_back(var_idx);
             }
             cl_idx++;
+            if(cl_idx == cl_num) 
+                break;
         }
     }
 }
@@ -278,6 +280,7 @@ int32_t main(int32_t argc, char **argv)
         exit(4);
     }
     read_CNF(argv[1]);
+    cout<<"Computing..."<<"\n";
     bool issatisfiable = Chaff();
     if (issatisfiable)
     {
